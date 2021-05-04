@@ -1,0 +1,17 @@
+{
+  "exitcrash": false,
+  "verbose": true,
+  "runOnChangeOnly": true,
+  "watch": [
+    "src",
+    "lib"
+  ],
+  "ignore": [
+    "./node_modules",
+    "./build",
+    "./test",
+    "*.log"
+  ],
+  "ext": "js,ts,json,yaml,yml,toml",
+  "exec": "ts-node -r tsconfig-paths/register src/index.ts"
+}

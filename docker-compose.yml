@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  bot:
+    build: '.'
+    depends_on:
+      - 'db'
+      - 'migrate'
+
+  db:
+    command: 'postgres -c listen_addresses="*"'
+    image: 'postgres'
+    restart: 'always'
+    ports:
+      - '5433:5432'
+    environment:
+      POSTGRES_PASSWORD: 'postgres'
+
+  migrate:
+    image: 'amacneil/dbmate'
+    scale: 0
+    command: 'up'
+    depends_on:
+      - 'db'
+    environment:
+      DATABASE_URL: 'postgres://postgres:postgres@db/pathogen?sslmode=disable'
+    volumes:
+      - './db:/db'

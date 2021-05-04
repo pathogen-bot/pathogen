@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  bot:
+    command: 'yarn start:prod'
+    restart: 'always'
+    environment:
+      - 'NODE_ENV=prod'
+
+  migrate:
+    scale: 1

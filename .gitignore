@@ -1,0 +1,6 @@
+.git
+node_modules
+build
+.nyc_output
+*.log
+.env*

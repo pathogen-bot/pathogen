@@ -1,0 +1,22 @@
+version: '3.8'
+services:
+  bot:
+    command: 'yarn start:dev'
+    volumes:
+      - '.:/usr/src/app'
+    environment:
+      - 'NODE_ENV=dev'
+
+  db:
+    logging:
+      driver: 'none'
+
+  adminer:
+    image: 'adminer'
+    restart: 'always'
+    depends_on:
+      - 'db'
+    ports:
+      - '8080:8080'
+    logging:
+      driver: 'none'
