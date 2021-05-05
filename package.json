@@ -25,7 +25,7 @@
     "prepare": "yarn run compile",
     "pretest": "tsc --noEmit",
     "test": "mocha -r ts-node/register -r tsconfig-paths/register test/**/*.spec.ts",
-    "coverage": "nyc --reporter lcov yarn test",
+    "coverage": "nyc yarn test",
     "posttest": "yarn run lint",
     "start:dev": "nodemon",
     "start:prod": "node ."
