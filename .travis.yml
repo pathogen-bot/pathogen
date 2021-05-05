@@ -1,0 +1,5 @@
+language: 'node_js'
+scripts:
+  - 'npm i -g codecov'
+after_success:
+  - 'codecov'

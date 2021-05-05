@@ -1,0 +1,6 @@
+ignore:
+  - 'test/'
+  - 'build/'
+  - 'src/'
+  - 'lib/**/index.ts'
+  - '.prettierrc.js'

@@ -1,8 +1,12 @@
 /* eslint node/no-unpublished-import: 0 */
 
+import {config} from 'dotenv';
+
 import {assert, expect} from 'chai';
 import {GuildConfig, GuildRecord, GuildStore} from 'pathogen';
 import postgres from 'postgres';
+
+config();
 
 const sql = postgres(
   process.env.DATABASE_URL || 'postgres://postgres:postgres@db/pathogen'

@@ -1,6 +1,7 @@
 .git
 node_modules
 build
+coverage
 .nyc_output
 *.log
 .env*
