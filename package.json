@@ -9,7 +9,6 @@
     "@types/mocha": "^8.2.2",
     "@types/node": "^14.11.2",
     "chai": "^4.3.4",
-    "codecov": "^3.8.2",
     "gts": "^3.1.0",
     "mocha": "^8.3.2",
     "nodemon": "^2.0.7",
@@ -26,7 +25,7 @@
     "prepare": "yarn run compile",
     "pretest": "tsc --noEmit",
     "test": "mocha -r ts-node/register -r tsconfig-paths/register test/**/*.spec.ts",
-    "coverage": "nyc --reporter lcov yarn test && yarn codecov",
+    "coverage": "nyc --reporter lcov yarn test",
     "posttest": "yarn run lint",
     "start:dev": "nodemon",
     "start:prod": "node ."
