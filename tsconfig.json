@@ -4,6 +4,8 @@
     "rootDir": ".",
     "outDir": "build",
     "esModuleInterop": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     "baseUrl": ".",
     "paths": {
       "pathogen": ["./lib"]
