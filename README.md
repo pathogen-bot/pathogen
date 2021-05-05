@@ -8,3 +8,6 @@ Just another general-purpose Discord bot
 **Database Migration**: `just db-migrate` \
 **Dev**: `just dev` \
 **Prod**: `just prod`
+
+## TODO:
+- Run tests in Docker and setup Travis CI

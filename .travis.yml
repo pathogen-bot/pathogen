@@ -1,3 +1,5 @@
 language: 'node_js'
-node_js:
-  - 'lts/*'
+scripts:
+  - 'yarn global add codecov'
+after_success:
+  - 'codecov'
