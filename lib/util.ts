@@ -1,3 +1,4 @@
+/* istanbul ignore next */
 /**
  * Create a class decorator that adds a `Set` property, `key`
  * to a class and appends he provided item

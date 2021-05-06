@@ -1,4 +1,4 @@
-import {Message} from 'discord.js-light';
+import type {Message} from 'discord.js-light';
 import {createSetDecorator} from 'lib/util';
 import {_Guard} from './guards';
 
@@ -66,3 +66,4 @@ export interface Command {
 export const SubCommand = createSetDecorator<typeof Command>('subCommands');
 
 export * from './guards';
+export * from './arg';

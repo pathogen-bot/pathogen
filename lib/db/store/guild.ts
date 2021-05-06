@@ -22,8 +22,8 @@ export class GuildStore extends BaseStore<GuildRecord> {
   async get(id: GuildRecord['id']): Promise<GuildRecord> {
     const [selected] = await this.sql<GuildRecord[]>`
       SELECT *
-        FROM ${this.sql(this.table)}
-        WHERE id = ${id}
+      FROM ${this.sql(this.table)}
+      WHERE id = ${id}
     `;
 
     return selected;
@@ -32,8 +32,8 @@ export class GuildStore extends BaseStore<GuildRecord> {
   async remove(id: GuildRecord['id']): Promise<GuildRecord> {
     const [deleted] = await this.sql<GuildRecord[]>`
       DELETE FROM ${this.sql(this.table)}
-        WHERE id = ${id}
-        RETURNING *
+      WHERE id = ${id}
+      RETURNING *
     `;
 
     return deleted;
@@ -47,13 +47,13 @@ export class GuildStore extends BaseStore<GuildRecord> {
     if (col === 'config') {
       const [updated] = await this.sql<GuildRecord[]>`
         UPDATE ${this.sql(this.table)}
-          SET config = (
-            SELECT config
-            FROM ${this.sql(this.table)}
-            WHERE id = ${id}
-          ) || ${this.sql.json(val)}
+        SET config = (
+          SELECT config
+          FROM ${this.sql(this.table)}
           WHERE id = ${id}
-          RETURNING *
+        ) || ${this.sql.json(val)}
+        WHERE id = ${id}
+        RETURNING *
       `;
 
       return updated;
@@ -61,9 +61,9 @@ export class GuildStore extends BaseStore<GuildRecord> {
       // TODO: is this safe?
       const [updated] = await this.sql<GuildRecord[]>`
         UPDATE ${this.sql(this.table)}
-          SET ${this.sql(col)} = ${val as string | number | boolean}
-          WHERE id = ${id}
-          RETURNING *
+        SET ${this.sql(col)} = ${val as string | number | boolean}
+        WHERE id = ${id}
+        RETURNING *
       `;
 
       return updated;
