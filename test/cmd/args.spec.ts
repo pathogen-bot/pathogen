@@ -1,7 +1,8 @@
 /* eslint node/no-unpublished-import: 0 */
 
-import {expect} from 'chai';
-import {Arg, ArgFormat, Args} from 'pathogen';
+import {assert, expect} from 'chai';
+import Joi from 'joi';
+import {CommandArg, ArgFormat, Args, KWArgs, ArgKind} from 'pathogen';
 
 describe('ARGUMENT PARSER', () => {
   describe('#parse()', () => {
@@ -111,16 +112,138 @@ describe('ARGUMENT PARSER', () => {
       expect(args.setIndex(3).peek().val).to.equal('arg4');
       expect(args.size).to.equal(4);
       expect(args.toString()).to.equal('arg1 arg2 arg3 arg4');
+      expect(
+        args
+          .setIndex(2)
+          .rest()
+          .map((a: CommandArg) => a.valueOf())
+          .join(' ')
+      ).to.equal('arg3 arg4');
     });
   });
 });
 
 describe('ARGUMENT', () => {
   it('successfully create a string argument', () => {
-    const arg = new Arg('string argument', ArgFormat.UNQUOTED_STRING);
+    const arg = new CommandArg('string argument', ArgFormat.UNQUOTED_STRING);
 
     expect(arg.val).to.equal('string argument');
     expect(arg.format).to.equal(ArgFormat.UNQUOTED_STRING);
     expect(arg.lang).to.equal(undefined);
+  });
+});
+
+describe('KWARGS', () => {
+  let parsed: KWArgs;
+  describe('#parse()', () => {
+    describe('successfully parse', () => {
+      it('parse arguments', () => {
+        const unparsed = '123 -123 -1.25 f aaa `owo` 7 uwu "no name"';
+        parsed = new KWArgs(unparsed, [
+          {name: 'uintArg', kind: ArgKind.UINT},
+          {name: 'intArg', kind: ArgKind.INT},
+          {name: 'floatArg', kind: ArgKind.FLOAT},
+          {name: 'boolArg', kind: ArgKind.BOOLEAN},
+          {name: 'stringArg', kind: ArgKind.STRING},
+          {name: 'codeArg', kind: ArgKind.CODE},
+          {
+            name: 'joiValidatedArg',
+            kind: ArgKind.UINT,
+            validate: Joi.number().min(2).max(10),
+          },
+          {
+            name: 'anyArg',
+            transform: (a: CommandArg) => (a.val += ' TRANSFORMED'),
+          },
+        ]);
+
+        expect(parsed.args).to.have.length(9);
+      });
+    });
+
+    describe('unsuccessfully parse', () => {
+      it('ArgKind.UINT', () => {
+        assert.throws(
+          () => new KWArgs('abc', [{name: '_', kind: ArgKind.UINT}]),
+          TypeError
+        );
+      });
+
+      it('ArgKind.INT', () => {
+        assert.throws(
+          () => new KWArgs('owo', [{name: '_', kind: ArgKind.INT}]),
+          TypeError
+        );
+      });
+
+      it('ArgKind.FLOAT', () => {
+        assert.throws(
+          () => new KWArgs('abc', [{name: '_', kind: ArgKind.FLOAT}]),
+          TypeError
+        );
+      });
+
+      it('ArgKind.BOOLEAN', () => {
+        assert.throws(
+          () => new KWArgs('apple', [{name: '_', kind: ArgKind.BOOLEAN}]),
+          TypeError
+        );
+      });
+
+      it('ArgKind.CODE', () => {
+        assert.throws(
+          () => new KWArgs('eee', [{name: '_', kind: ArgKind.CODE}]),
+          TypeError
+        );
+      });
+
+      it('Joi validation', () => {
+        assert.throws(
+          () =>
+            new KWArgs('123', [
+              {name: '_', kind: ArgKind.UINT, validate: Joi.number().max(10)},
+            ]),
+          Error
+        );
+      });
+    });
+  });
+
+  describe('#get()', () => {
+    it('ArgKind.UINT', () => {
+      expect(parsed.get('uintArg')?.val).to.equal(123);
+    });
+
+    it('ArgKind.INT', () => {
+      expect(parsed.get('intArg')?.val).to.equal(-123);
+    });
+
+    it('ArgKind.FLOAT', () => {
+      expect(parsed.get('floatArg')?.val).to.equal(-1.25);
+    });
+
+    it('ArgKind.BOOLEAN', () => {
+      expect(parsed.get('boolArg')?.val).to.equal(false);
+    });
+
+    it('ArgKind.STRING', () => {
+      expect(parsed.get('stringArg')?.val).to.equal('aaa');
+    });
+
+    it('ArgKind.CODE', () => {
+      expect(parsed.get('codeArg')?.val).to.equal('owo');
+    });
+
+    it('ArgKind.ANY', () => {
+      expect(parsed.get('anyArg')?.val).to.equal('uwu TRANSFORMED');
+    });
+
+    it('Joi arg validation', () => {
+      expect(parsed.get('joiValidatedArg')?.val).to.equal(7);
+    });
+
+    it('unnamed arg', () => {
+      expect(parsed.nth(8)?.val).to.equal('no name');
+    });
   });
 });

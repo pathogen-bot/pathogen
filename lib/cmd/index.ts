@@ -1,5 +1,6 @@
 import type {Message} from 'discord.js-light';
 import {createSetDecorator} from 'lib/util';
+import {ArgOptions} from './args/validation';
 import {_Guard} from './guards';
 
 export abstract class Command {
@@ -58,6 +59,24 @@ export interface Command {
    * ```
    */
   subCommands?: Set<typeof Command>;
+
+  /**
+   * The expected arguments a command takes. Providing a `kind` option will transform the arg
+   * to the correct type and wil rase an error if it is unable to do so.
+   *
+   * This can be used with the `@Arg` decorator
+   *
+   * @example ```ts
+   * import Joi from 'joi';
+   *
+   * \@Arg({
+   *   name: 'uintArg',
+   *   kind: ArgKind.UINT,
+   *   validate: Joi.number().min(0).max(400),
+   * })
+   * ```
+   */
+  argSchema: ArgOptions<unknown>[];
 }
 
 /**
@@ -66,4 +85,4 @@ export interface Command {
 export const SubCommand = createSetDecorator<typeof Command>('subCommands');
 
 export * from './guards';
-export * from './arg';
+export * from './args';

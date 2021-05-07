@@ -12,6 +12,7 @@
     "@types/mocha": "^8.2.2",
     "@types/node": "^14.11.2",
     "chai": "^4.3.4",
+    "discord.js": "^12.5.3",
     "gts": "^3.1.0",
     "husky": "^6.0.0",
     "mocha": "^8.3.2",
@@ -28,7 +29,7 @@
     "fmt": "gts fix",
     "prepare": "yarn run compile && husky install",
     "pretest": "tsc --noEmit",
-    "test": "mocha -r ts-node/register -r tsconfig-paths/register -p ./tsconfig.json test/**/*.spec.ts",
+    "test": "mocha -r ts-node/register -r tsconfig-paths/register -p ./tsconfig.json test/**/*.spec.ts test/*.spec.ts",
     "coverage": "nyc yarn test",
     "posttest": "yarn run lint",
     "start:dev": "nodemon",
@@ -37,6 +38,7 @@
   "dependencies": {
     "discord.js-light": "^3.5.9",
     "dotenv": "^8.2.0",
+    "joi": "^17.4.0",
     "pathogen": "link:./build/lib",
     "postgres": "2.0.0-beta.5"
   },
@@ -49,7 +51,6 @@
       "build/",
       "src/",
       "coverage/",
-      "lib/**/index.ts",
       "lib/cmd/guards/**/*.ts",
       "*.js"
     ]

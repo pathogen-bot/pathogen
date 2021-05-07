@@ -6,3 +6,4 @@ coverage
 *.log
 .env*
 test.js
+*.vim
