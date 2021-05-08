@@ -1,9 +1,10 @@
-import type {Message} from 'discord.js-light';
+import {Message, Collection} from 'discord.js-light';
 import {createSetDecorator} from 'lib/util';
 import {ArgOptions} from './args/validation';
 import {_Guard} from './guards';
 
 export abstract class Command {
+  constructor(readonly location: string) {}
   /**
    * The name a command is primarily identified and indexed by.
    */
@@ -18,6 +19,10 @@ export abstract class Command {
    * The main function that makes the command work!
    */
   abstract run(msg: Message): Promise<void>;
+
+  reload() {
+    // TODO
+  }
 }
 
 export interface Command {
@@ -77,6 +82,27 @@ export interface Command {
    * ```
    */
   argSchema: ArgOptions<unknown>[];
+}
+
+export class CommandRegistry extends Collection<string, Command> {
+  constructor() {
+    super();
+  }
+
+  /**
+   * Register a command
+   */
+  register<T extends Command>(c: T): this {
+    this.set(c.name, c);
+    return this;
+  }
+
+  /**
+   * Find a top-level command by its name or one of its aliases
+   */
+  get(c: string): Command | undefined {
+    return this.find(({name, aliases}) => name === c || !!aliases?.includes(c));
+  }
 }
 
 /**
