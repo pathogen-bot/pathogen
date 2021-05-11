@@ -1,5 +1,5 @@
 import {Message, Collection} from 'discord.js-light';
-import {createSetDecorator} from 'lib/util';
+import {createSetDecorator} from '../util';
 import {ArgOptions} from './args/validation';
 import {_Guard} from './guards';
 

@@ -1,4 +1,4 @@
-import {parseBoolean} from 'lib/util';
+import {parseBoolean} from '../../util';
 import {Command} from '..';
 import {ArgOptions} from './validation';
 

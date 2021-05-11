@@ -14,6 +14,10 @@ prod:
 	docker-compose -f docker-compose.yml -f docker-compose.prod.yml build
 	docker-compose -f docker-compose.yml -f docker-compose.prod.yml up
 
+# Run tests in Docker
+test:
+	docker-compose -f docker-compose.yml -f ./test/docker-compose.test.yml up --build
+
 # +-- DATABASE STUFF --+
 
 # Run a database migration
