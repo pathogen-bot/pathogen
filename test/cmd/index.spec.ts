@@ -25,11 +25,11 @@ describe('COMMAND REGISTRY', () => {
     withAliases.aliases = ['alias'];
 
     registry
-      .register(new (createCommand('firstCommand'))())
-      .register(new (createCommand('secondCommand'))())
-      .register(new (createCommand('thirdCommand'))())
-      .register(new (createCommand('fourthCommand'))())
-      .register(withAliases);
+      .registerCmd(new (createCommand('firstCommand'))())
+      .registerCmd(new (createCommand('secondCommand'))())
+      .registerCmd(new (createCommand('thirdCommand'))())
+      .registerCmd(new (createCommand('fourthCommand'))())
+      .registerCmd(withAliases);
   });
 
   it('get commands by name', () => {

@@ -1,5 +1,6 @@
 import {Sql} from 'postgres';
-import {DatabaseRecord} from 'pathogen';
+import {DatabaseRecord} from '../../models/db';
+import {DotNotation, DotToPropType} from '../../util';
 
 export * from './guild';
 
@@ -36,9 +37,14 @@ export abstract class BaseStore<T extends DatabaseRecord<unknown>> {
    * @param val The new value
    * @returns The modified row
    */
-  abstract update<C extends keyof T>(
+  abstract update<K extends DotNotation<T>>(
     id: T['id'],
-    col: C,
-    val: T[C]
+    col: K,
+    val: DotToPropType<T, K>
   ): Promise<T>;
+  // abstract update<C extends keyof T>(
+  //   id: T['id'],
+  //   col: C,
+  //   val: T[C]
+  // ): Promise<T>;
 }

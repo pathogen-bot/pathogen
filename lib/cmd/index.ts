@@ -1,8 +1,9 @@
-import {Message, Collection} from 'discord.js-light';
+import {Message} from 'discord.js-light';
 import {createSetDecorator} from '../util';
 import {ArgOptions} from './args/validation';
 import {_Guard} from './guards';
 
+/* istanbul ignore next class */
 export abstract class Command {
   constructor(readonly location: string) {}
   /**
@@ -82,27 +83,6 @@ export interface Command {
    * ```
    */
   argSchema: ArgOptions<unknown>[];
-}
-
-export class CommandRegistry extends Collection<string, Command> {
-  constructor() {
-    super();
-  }
-
-  /**
-   * Register a command
-   */
-  register<T extends Command>(c: T): this {
-    this.set(c.name, c);
-    return this;
-  }
-
-  /**
-   * Find a top-level command by its name or one of its aliases
-   */
-  get(c: string): Command | undefined {
-    return this.find(({name, aliases}) => name === c || !!aliases?.includes(c));
-  }
 }
 
 /**

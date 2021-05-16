@@ -9,7 +9,8 @@ import postgres from 'postgres';
 config();
 
 const sql = postgres(
-  process.env.DATABASE_URL || 'postgres://postgres:postgres@db/pathogen'
+  process.env.DATABASE_URL || 'postgres://postgres:postgres@db/pathogen',
+  {max: 1}
 );
 const store = new GuildStore(sql);
 
@@ -68,10 +69,9 @@ describe('GUILD STORE', () => {
 
   describe('#update()', () => {
     it('successfully update JSON config column', async () => {
-      const config: GuildConfig = {prefix: '??'};
+      const updated = await store.update('1', 'config.prefix', '??');
 
-      const updated = await store.update('1', 'config', config);
-      expect(updated.config).to.deep.equal(config);
+      expect(updated.config).to.deep.equal({prefix: '??'} as GuildConfig);
     });
 
     it('successfully update non-JSON column', async () => {

@@ -8,3 +8,6 @@ export abstract class Registry<K, V> extends Collection<K, V> {
     return this;
   }
 }
+
+export * from './cmd';
+export * from './lang';
