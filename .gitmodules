@@ -1,3 +1,4 @@
 [submodule "lang"]
 	path = lang
 	url = git@github.com:pathogen-bot/lang.git
+	branch = main
