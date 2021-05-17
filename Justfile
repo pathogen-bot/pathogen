@@ -42,13 +42,20 @@ db-recreate: db-drop db-migrate
 # +-- MISC STUFF --+
 
 # Transpile the TypeScript files into JavaScript
-build: setup
+build: setup build-lang
 	yarn run compile
 
 # Delete previously built files and rebuild
 clean-build: setup
 	yarn run clean
 	just build
+
+update-lang:
+	git submodule update --init lang
+	just build-lang
+
+build-lang:
+	find lang/* -maxdepth 0 -type d -not -path '*/\.*' -printf '-f %f:lang/%f/**/*.ftl ' | xargs fluent-types -c lang/*.ftl -o lang/index.d.ts
 
 # Clean up the dir. This should (mostly) remove files that are in .gitignore
 clean:
@@ -60,5 +67,6 @@ clean:
 # Run the initial setup process. This is most useful after running `just clean`
 setup:
 	yarn --freeze-lockfile
+	just update-lang
 
 # vim:ft=make

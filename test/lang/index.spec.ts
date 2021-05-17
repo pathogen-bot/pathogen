@@ -1,11 +1,13 @@
 /* eslint node/no-unpublished-import: 0 */
+/* eslint @typescript-eslint/ban-ts-comment: 0 */
 
 import {expect} from 'chai';
 import {LanguageClient} from 'pathogen';
 import path from 'path';
+import type {FluentMessages} from '.';
 
 describe('LANGUAGE', () => {
-  let client: LanguageClient;
+  let client: LanguageClient<FluentMessages>;
 
   describe('::new', () => {
     it('create language client without common', () => {
@@ -84,6 +86,8 @@ describe('LANGUAGE', () => {
 
     it('missing key', () => {
       const errors: Error[] = [];
+
+      // @ts-expect-error
       const notFound = client.get('en', 'this-key-does-not-exist', {}, errors);
 
       expect(notFound).to.equal('this-key-does-not-exist');
@@ -92,6 +96,7 @@ describe('LANGUAGE', () => {
     });
 
     it('unknown bundle', () => {
+      // @ts-expect-error
       const notFound = client.get('unknown-bundle', 'unknown-key');
 
       expect(notFound).to.equal('unknown-key');
@@ -101,6 +106,7 @@ describe('LANGUAGE', () => {
       const fallback = client.fallback;
       client.fallback = '';
 
+      // @ts-expect-error
       const notFound = client.get('en', 'unknown-key');
 
       expect(notFound).to.equal('unknown-key');

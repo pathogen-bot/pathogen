@@ -42,9 +42,4 @@ export abstract class BaseStore<T extends DatabaseRecord<unknown>> {
     col: K,
     val: DotToPropType<T, K>
   ): Promise<T>;
-  // abstract update<C extends keyof T>(
-  //   id: T['id'],
-  //   col: C,
-  //   val: T[C]
-  // ): Promise<T>;
 }

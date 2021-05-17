@@ -1,4 +1,4 @@
-import {FluentBundle, FluentResource, FluentVariable} from '@fluent/bundle';
+import {FluentBundle, FluentResource} from '@fluent/bundle';
 import {LanguageRegistry} from '../registry/lang';
 import {Dirent, readdirSync, readFileSync} from 'fs';
 import path from 'path';
@@ -10,7 +10,9 @@ export interface LanguageClientOptions {
 }
 
 /** The Localization client used in the bot */
-export class LanguageClient {
+export class LanguageClient<
+  T = {[key: string]: {[key: string]: {[key: string]: string} | never}}
+> {
   registry = new LanguageRegistry();
   langDir: string;
   fallback?: string;
@@ -117,22 +119,27 @@ export class LanguageClient {
    * @param [errors] Any errors that occurred while processing will be pushed to this array
    * @returns The translated string
    */
-  get(
-    lang: string,
-    msg: string,
-    args?: Record<string, FluentVariable>,
+  get<
+    // T extends FluentMessages,
+    Lang extends keyof T,
+    Msg extends keyof T[Lang],
+    Args extends T[Lang][Msg]
+  >(
+    lang: Lang,
+    msg: Msg,
+    args: Args = {} as Args,
     errors: Error[] = []
-  ): string {
-    const bundle = this.registry.get(lang);
+  ): string | Msg {
+    const bundle = this.registry.get(lang as string);
 
     if (bundle) {
-      const message = bundle.getMessage(msg);
+      const message = bundle.getMessage(msg as string);
 
       if (message?.value) {
         return bundle.formatPattern(message.value, args, errors);
       } else if (this.fallback) {
         const bundle = this.registry.get(this.fallback)!;
-        const message = bundle.getMessage(msg);
+        const message = bundle.getMessage(msg as string);
 
         if (message?.value) {
           return bundle.formatPattern(message.value, args, errors);
